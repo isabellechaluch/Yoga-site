@@ -1,3 +1,5 @@
+let cards = document.querySelectorAll('.card');
+let numberOfCardsDisplay = document.querySelector(".numero-posicoes");
 let playButton = document.querySelector(".play-button");
 let pauseButton = document.querySelector(".pause-button");
 let restartButton = document.querySelector(".restart-button");
@@ -7,6 +9,9 @@ let displayInterval;
 let originalSeconds;
 let currentSeconds;
 let currentName;
+let numberOfCards = cards.length;
+
+numberOfCardsDisplay.textContent = numberOfCards + " posições";
 
 function clickCard() {
     let nomePosicao = this.querySelector('h2').textContent;
@@ -58,9 +63,10 @@ function changeButton() {
     pauseButton.style.display = (pauseButton.style.display === "none") ? "block" : "none";
 }
 
-document.querySelectorAll('.card').forEach(card => {
+cards.forEach(card => {
     card.addEventListener('click', clickCard);
 });
+
 playButton.addEventListener('click', function () { start(currentSeconds, currentName); });
 pauseButton.addEventListener('click', pauseTime);
 restartButton.addEventListener('click', restartTime);
