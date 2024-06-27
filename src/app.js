@@ -32,7 +32,7 @@ function start(sec, name) {
     let startAudio = document.getElementById("start-audio");
     startAudio.play();
 
-    if (displayName.textContent == "Nome") {
+    if (currentName == null) {
         changeButton();
         displayName.textContent = "Selecione um exercício!"
     } else {
