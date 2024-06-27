@@ -32,18 +32,23 @@ function start(sec, name) {
     let startAudio = document.getElementById("start-audio");
     startAudio.play();
 
-    displayInterval = setInterval(function () {
-        sec--; // Reduz o tempo total segundo a segundo
-        currentSeconds = sec;
-        if (sec <= 0) {
-            let alarmAudio = document.getElementById("alarm-audio");
-            alarmAudio.play(); // Reproduz o áudio
-            clearInterval(displayInterval);
-            changeButton();
-        }
-        display.textContent = sec;
-        displayName.textContent = name;
-    }, 1000);
+    if (displayName.textContent == "Nome") {
+        changeButton();
+        displayName.textContent = "Selecione um exercício!"
+    } else {
+        displayInterval = setInterval(function () {
+            sec--; // Reduz o tempo total segundo a segundo
+            currentSeconds = sec;
+            if (sec <= 0) {
+                let alarmAudio = document.getElementById("alarm-audio");
+                alarmAudio.play(); // Reproduz o áudio
+                clearInterval(displayInterval);
+                changeButton();
+            }
+            display.textContent = sec;
+            displayName.textContent = name;
+        }, 1000);
+    }   
 }
 
 function pauseTime() {
@@ -56,6 +61,7 @@ function restartTime() {
     currentSeconds = originalSeconds;
     display.textContent = currentSeconds;
     start(currentSeconds, currentName);
+    changeButton();
 }
 
 function changeButton() {
@@ -66,6 +72,24 @@ function changeButton() {
 cards.forEach(card => {
     card.addEventListener('click', clickCard);
 });
+
+// Verifica se o navegador suporta a API de Bloqueio de Tela
+if ('wakeLock' in navigator) {
+    // Solicita o bloqueio de tela
+    let wakeLock = null;
+
+    async function requestWakeLock() {
+        try {
+            wakeLock = await navigator.wakeLock.request('screen');
+            console.log('Bloqueio de tela ativado com sucesso!');
+        } catch (err) {
+            console.error('Falha ao solicitar o bloqueio de tela:', err.message);
+        }
+    }
+
+    // Chama a função para solicitar o bloqueio de tela quando necessário
+    requestWakeLock();
+}
 
 playButton.addEventListener('click', function () { start(currentSeconds, currentName); });
 pauseButton.addEventListener('click', pauseTime);
